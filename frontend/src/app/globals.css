@@ -29,10 +29,10 @@ body {
   font-family: var(--font-body);
 }
 
-/* Reproduit le confort de lecture d'un zoom navigateur à 133 % sur ordinateur. */
+/* Reproduit le confort de lecture d'un zoom navigateur à 120 % sur ordinateur. */
 @media (min-width: 861px) {
   body {
-    zoom: 1.33;
+    zoom: 1.2;
   }
 }
 
