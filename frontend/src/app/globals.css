@@ -32,13 +32,6 @@ body {
   font-family: var(--font-body);
 }
 
-@supports (padding: env(safe-area-inset-top)) {
-  body {
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-}
-
 /* Reproduit le confort de lecture d'un zoom navigateur à 120 % sur ordinateur. */
 @media (min-width: 861px) {
   body {
