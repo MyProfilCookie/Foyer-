@@ -29,6 +29,13 @@ body {
   font-family: var(--font-body);
 }
 
+/* Reproduit le confort de lecture d'un zoom navigateur à 133 % sur ordinateur. */
+@media (min-width: 861px) {
+  body {
+    zoom: 1.33;
+  }
+}
+
 * { box-sizing: border-box; }
 a { color: inherit; text-decoration: none; }
 h1, h2, h3, h4, h5, h6, p { margin: 0; }
