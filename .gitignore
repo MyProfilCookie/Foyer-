@@ -1,0 +1,22 @@
+# Dependencies and Next.js build files
+node_modules/
+.npm-cache/
+.next/
+out/
+
+# Local secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# TypeScript and system files
+*.tsbuildinfo
+.DS_Store
+
+# Local assistant settings
+.claude/settings.local.json
+
+# Logs
+*.log
+npm-debug.log*
