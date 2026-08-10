@@ -54,6 +54,33 @@ export default function MembersManager({ householdId, members }: { householdId: 
     router.refresh();
   }
 
+  async function changeRole(member: Member, nextRole: 'member' | 'admin') {
+    if (member.role === nextRole) return;
+    const confirmed = window.confirm(
+      nextRole === 'admin'
+        ? `Donner les droits administrateur à ${member.name} ? Cette personne pourra gérer le foyer et les autres membres.`
+        : `Retirer les droits administrateur de ${member.name} ? Vous pourrez ensuite choisir ses accès.`
+    );
+    if (!confirmed) return;
+
+    setError('');
+    setSuccess('');
+    setBusyId(member.id);
+    const update = nextRole === 'admin'
+      ? { role: nextRole, permissions: SECTIONS.slice() }
+      : { role: nextRole };
+    const { error: updateError } = await supabase.from('parents').update(update).eq('id', member.id);
+    setBusyId(null);
+
+    if (updateError) {
+      setError("Le rôle de cette personne n'a pas pu être modifié.");
+      return;
+    }
+
+    setSuccess(`${member.name} est maintenant ${nextRole === 'admin' ? 'administrateur' : 'membre'}.`);
+    router.refresh();
+  }
+
   async function removeMember(memberId: string) {
     setBusyId(memberId);
     await supabase.from('parents').delete().eq('id', memberId);
@@ -168,9 +195,19 @@ export default function MembersManager({ householdId, members }: { householdId: 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, gap: 12 }}>
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 13, fontWeight: 700 }}>{m.name}</div>
-                <div style={{ fontSize: 12, color: PALETTE.muted }}>{m.email} · {m.role === 'admin' ? 'Administrateur' : 'Membre'}</div>
+                <div style={{ fontSize: 12, color: PALETTE.muted }}>{m.email}</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <select
+                  aria-label={`Rôle de ${m.name}`}
+                  value={m.role}
+                  disabled={busyId === m.id}
+                  onChange={(event) => changeRole(m, event.target.value as 'member' | 'admin')}
+                  style={{ ...inputStyle, width: 'auto', minWidth: 118, padding: '6px 9px', fontSize: 11, fontWeight: 700 }}
+                >
+                  <option value="member">Membre</option>
+                  <option value="admin">Administrateur</option>
+                </select>
                 <button type="button" onClick={() => resendMemberInvite(m)} disabled={busyId === m.id || inviteCooldown} style={{ border: 'none', background: PALETTE.tealBg, color: PALETTE.tealText, borderRadius: 8, padding: '5px 8px', fontSize: 10, fontWeight: 700, cursor: inviteCooldown ? 'default' : 'pointer', opacity: inviteCooldown ? .6 : 1 }}>
                   {inviteCooldown ? 'Veuillez patienter' : 'Renvoyer l’invitation'}
                 </button>

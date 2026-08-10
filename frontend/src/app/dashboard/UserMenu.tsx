@@ -25,7 +25,7 @@ export default function UserMenu({ name }: { name: string }) {
   async function handleLogout() {
     setLoading(true);
     await supabase.auth.signOut();
-    router.push('/login');
+    router.push('/');
     router.refresh();
   }
 
