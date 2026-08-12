@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import { PALETTE } from '../_shared/theme';
 
-export default function UserMenu({ name }: { name: string }) {
+export default function UserMenu({ name, photoUrl }: { name: string; photoUrl?: string | null }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -50,7 +50,7 @@ export default function UserMenu({ name }: { name: string }) {
           cursor: 'pointer',
         }}
       >
-        {name.charAt(0).toUpperCase()}
+        {photoUrl ? <img src={photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} /> : name.charAt(0).toUpperCase()}
       </button>
 
       {open && (

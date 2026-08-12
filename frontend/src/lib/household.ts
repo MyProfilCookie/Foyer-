@@ -13,6 +13,7 @@ export type Parent = {
   role: 'owner' | 'admin' | 'member';
   relationship: string;
   permissions: string[];
+  avatar_path: string | null;
   created_at: string;
 };
 

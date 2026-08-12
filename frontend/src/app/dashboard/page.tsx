@@ -47,11 +47,17 @@ export default async function DashboardPage() {
     journal=(jData ?? []).map(j=>({id:j.id,author:parentName(j.author_id),child:childName(j.child_id),date:parseDate(j.entry_date),text:j.text}));
   }
   const nextEvent=upcomingEvents[0];
+  const avatarEntries = await Promise.all(parents.map(async (parent) => {
+    if (!parent.avatar_path) return [parent.id, null] as const;
+    const { data } = await supabase.storage.from('avatars').createSignedUrl(parent.avatar_path, 3600);
+    return [parent.id, data?.signedUrl ?? null] as const;
+  }));
+  const avatarUrls = new Map(avatarEntries);
 
   return <div className="pageShell" style={{ minHeight:'100vh',background:PALETTE.bgGradient,fontFamily:'var(--font-body)',color:PALETTE.text }}>
     <Sidebar active="/dashboard" ownParent={ownParent}/>
     <main className={`pageContent ${styles.content}`}>
-      <header className={styles.top}><div className={styles.welcome}><small>{fmtFull(today)}</small><h1>Bonjour {myName} 👋</h1></div><div className={styles.people}>{others.map((p,i)=><span key={p.id} className={styles.person} title={p.name} style={{background:i%2?PALETTE.purple:PALETTE.teal}}>{p.name.charAt(0).toLocaleUpperCase('fr-FR')}</span>)}<UserMenu name={myName}/></div></header>
+      <header className={styles.top}><div className={styles.welcome}><small>{fmtFull(today)}</small><h1>Bonjour {myName} 👋</h1></div><div className={styles.people}>{others.map((p,i)=><span key={p.id} className={styles.person} title={p.name} style={{background:i%2?PALETTE.purple:PALETTE.teal,overflow:'hidden'}}>{avatarUrls.get(p.id)?<img src={avatarUrls.get(p.id)!} alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>:p.name.charAt(0).toLocaleUpperCase('fr-FR')}</span>)}<UserMenu name={myName} photoUrl={ownParent ? avatarUrls.get(ownParent.id) : null}/></div></header>
 
       <section className={styles.hero}><div className={styles.heroLabel}>VOTRE FOYER AUJOURD’HUI</div><h2>{nextEvent ? `${nextEvent.title}, ${fmtShort(nextEvent.date)}` : 'Une journée bien organisée commence ici'}</h2><p>{nextEvent ? 'Votre prochain événement est prêt dans le calendrier.' : 'Aucun événement à venir. Profitez de ce moment calme.'}</p></section>
 

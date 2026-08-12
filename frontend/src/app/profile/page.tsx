@@ -8,15 +8,21 @@ import ChildrenManager from './ChildrenManager';
 import MembersManager from './MembersManager';
 import LogoutButton from './LogoutButton';
 import PageHeading from '../_shared/PageHeading';
+import ProfilePhoto from './ProfilePhoto';
 
 export default async function ProfilePage() {
   const { supabase, user, ownParent, householdId, isAdmin, parents, children } = await requireHousehold();
   const invitedMembers = parents.filter((p) => p.role !== 'owner');
 
   let householdName = '';
+  let avatarUrl: string | null = null;
   if (householdId) {
     const { data } = await supabase.from('households').select('name').eq('id', householdId).maybeSingle();
     householdName = data?.name ?? '';
+  }
+  if (ownParent?.avatar_path) {
+    const { data } = await supabase.storage.from('avatars').createSignedUrl(ownParent.avatar_path, 3600);
+    avatarUrl = data?.signedUrl ?? null;
   }
 
   return (
@@ -33,7 +39,10 @@ export default async function ProfilePage() {
           <div style={{ background: PALETTE.card, borderRadius: 18, boxShadow: PALETTE.cardShadow, padding: 18 }}>
             <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 14, marginBottom: 14 }}>Mon compte</div>
             {ownParent ? (
-              <ProfileForm parentId={ownParent.id} initialName={ownParent.name} email={user.email ?? ''} />
+              <>
+                <ProfilePhoto parentId={ownParent.id} name={ownParent.name} initialUrl={avatarUrl} />
+                <ProfileForm parentId={ownParent.id} initialName={ownParent.name} email={user.email ?? ''} />
+              </>
             ) : (
               <p style={{ fontSize: 13, color: PALETTE.mutedLight }}>Aucun profil parent relié à ce compte.</p>
             )}
