@@ -54,7 +54,8 @@ export default function ProfilePhoto({ parentId, name, initialUrl, initialPath }
       const { error: removeError } = await supabase.storage.from('avatars').remove([currentPath]);
       if (removeError) console.error('Previous avatar removal failed:', removeError);
     }
-    const { data } = await supabase.storage.from('avatars').createSignedUrl(path, 3600);
+    const { data, error: signedUrlError } = await supabase.storage.from('avatars').createSignedUrl(path, 3600);
+    if (signedUrlError) console.error('Avatar signed URL failed:', signedUrlError);
     setPreview(data?.signedUrl ?? URL.createObjectURL(file));
     setCurrentPath(path);
     setLoading(false);
