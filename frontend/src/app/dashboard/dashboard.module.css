@@ -14,7 +14,7 @@
 .stat:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(62,91,119,.12)}
 .stat:after{content:"";position:absolute;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.34);right:-35px;top:-38px}
 .stat small{display:block;font-size:10px;font-weight:800;letter-spacing:.09em;margin-bottom:4px}
-.stat strong{display:block;font-family:var(--font-heading);font-size:16px;color:var(--color-accent-800)}
+.stat strong{display:block;font-family:var(--font-heading);font-size:16px;color:#354b5f}
 .mainGrid{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}
 .panel{background:color-mix(in srgb,var(--color-surface) 88%,transparent);border:1px solid var(--color-divider);border-radius:23px;padding:20px;box-shadow:var(--shadow-card)}
 .panelHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
