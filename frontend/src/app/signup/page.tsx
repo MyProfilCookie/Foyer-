@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import { PALETTE, formatPersonName, inputStyle, labelStyle, primaryButtonStyle } from '../_shared/theme';
 
@@ -10,6 +11,7 @@ type ChildRow = { id: string; name: string; birth: string };
 const STEP_LABELS = ['1. Compte', '2. Autre parent', '3. Enfants', '4. Confirmation'];
 
 export default function SignupPage() {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [account, setAccount] = useState({ name: '', email: '', password: '' });
   const [inviteEmail, setInviteEmail] = useState('');
@@ -37,14 +39,14 @@ export default function SignupPage() {
     setError('');
     setLoading(true);
 
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
       email: account.email.trim(),
       password: account.password,
       options: { data: { name: formatPersonName(account.name) } },
     });
 
-    setLoading(false);
     if (signUpError) {
+      setLoading(false);
       setError(
         signUpError.message.toLowerCase().includes('already registered')
           ? 'Un compte existe déjà avec cet email.'
@@ -53,8 +55,15 @@ export default function SignupPage() {
       return;
     }
 
+    if (!signUpData.session) {
+      setLoading(false);
+      setError("Confirmez votre adresse e-mail avant d'accéder à votre espace.");
+      return;
+    }
+
     setJoinedExisting(true);
-    setStep(4);
+    router.replace('/dashboard');
+    router.refresh();
   }
 
   async function handleFinish() {
@@ -93,12 +102,13 @@ export default function SignupPage() {
       })),
     });
 
-    setLoading(false);
     if (initializationError) {
+      setLoading(false);
       setError("Le compte a été créé, mais le foyer n'a pas pu être initialisé. Reconnectez-vous puis réessayez.");
       return;
     }
-    setStep(4);
+    router.replace('/dashboard');
+    router.refresh();
   }
 
   async function handleNext() {
