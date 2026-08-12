@@ -25,7 +25,7 @@ using (
   bucket_id = 'avatars'
   and exists (
     select 1 from public.parents pictured
-    where pictured.id = ((storage.foldername(name))[1])::uuid
+    where pictured.id = split_part(name, '/', 1)::uuid
       and public.is_household_member(pictured.household_id)
   )
 );
@@ -34,23 +34,23 @@ create policy avatars_insert_own
 on storage.objects for insert to authenticated
 with check (
   bucket_id = 'avatars'
-  and public.is_own_parent(((storage.foldername(name))[1])::uuid)
+  and public.is_own_parent(split_part(name, '/', 1)::uuid)
 );
 
 create policy avatars_update_own
 on storage.objects for update to authenticated
 using (
   bucket_id = 'avatars'
-  and public.is_own_parent(((storage.foldername(name))[1])::uuid)
+  and public.is_own_parent(split_part(name, '/', 1)::uuid)
 )
 with check (
   bucket_id = 'avatars'
-  and public.is_own_parent(((storage.foldername(name))[1])::uuid)
+  and public.is_own_parent(split_part(name, '/', 1)::uuid)
 );
 
 create policy avatars_delete_own
 on storage.objects for delete to authenticated
 using (
   bucket_id = 'avatars'
-  and public.is_own_parent(((storage.foldername(name))[1])::uuid)
+  and public.is_own_parent(split_part(name, '/', 1)::uuid)
 );
