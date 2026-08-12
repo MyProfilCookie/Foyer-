@@ -17,14 +17,14 @@ export function canAdminister(parent: { role?: string | null } | null) {
 }
 
 export const PALETTE = {
-  bg: '#EAF6FF',
-  bgGradient: 'linear-gradient(180deg, #EAF9FF 0%, #E3F1FF 50%, #F3EEFF 100%)',
-  card: '#DCEEFF',
-  cardShadow: '0 4px 16px rgba(51, 80, 108, 0.12), 0 1px 3px rgba(51, 80, 108, 0.08)',
-  text: '#3A3A3A',
-  muted: '#8a8a8a',
-  mutedLight: '#999999',
-  divider: '#CFE4F5',
+  bg: 'var(--color-bg)',
+  bgGradient: 'var(--color-bg-gradient)',
+  card: 'var(--color-card)',
+  cardShadow: 'var(--shadow-card)',
+  text: 'var(--color-text)',
+  muted: 'var(--color-muted)',
+  mutedLight: 'var(--color-muted-2)',
+  divider: 'var(--color-divider)',
   coral: '#FF6B6B',
   coralBg: '#FFE8E8',
   coralText: '#a15757',
@@ -69,8 +69,8 @@ export function formatPersonName(value: string) {
 }
 
 export const inputStyle: CSSProperties = {
-  border: '1px solid #D6E7F5',
-  background: '#F8FBFF',
+  border: '1px solid var(--color-input-border)',
+  background: 'var(--color-input)',
   borderRadius: 12,
   padding: '10px 12px',
   fontSize: 14,

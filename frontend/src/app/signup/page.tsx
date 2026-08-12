@@ -61,7 +61,7 @@ export default function SignupPage() {
     setError('');
     setLoading(true);
 
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
       email: account.email.trim(),
       password: account.password,
       options: { data: { name: formatPersonName(account.name) } },
@@ -77,42 +77,26 @@ export default function SignupPage() {
       return;
     }
 
-    const { data: household, error: householdError } = await supabase
-      .from('households')
-      .insert({ name: `Foyer de ${formatPersonName(account.name)}` })
-      .select()
-      .single();
-
-    if (householdError || !household) {
-      setError("Le compte a été créé mais l'espace n'a pas pu être initialisé.");
+    if (!signUpData.session) {
+      setError("Confirmez votre adresse e-mail avant de créer votre espace.");
       setLoading(false);
       return;
     }
 
-    const { data: newParent, error: parentError } = await supabase
-      .from('parents')
-      .insert({ household_id: household.id, name: formatPersonName(account.name), email: account.email.trim().toLowerCase(), role: 'owner' })
-      .select()
-      .single();
-
-    if (newParent) {
-      await supabase.from('households').update({ owner_id: newParent.id }).eq('id', household.id);
-    }
-
     const namedChildren = children.filter((c) => c.name.trim().length > 0);
-    if (namedChildren.length > 0) {
-      await supabase.from('children').insert(
-        namedChildren.map((c) => ({
-          household_id: household.id,
-          name: formatPersonName(c.name),
-          birth_date: c.birth || null,
-        }))
-      );
-    }
+    const { error: initializationError } = await supabase.rpc('create_household_with_owner', {
+      household_name: `Foyer de ${formatPersonName(account.name)}`,
+      owner_name: formatPersonName(account.name),
+      children_data: namedChildren.map((c) => ({
+        name: formatPersonName(c.name),
+        birth_date: c.birth || null,
+      })),
+    });
 
     setLoading(false);
-    if (parentError) {
-      setError("Le compte et l'espace ont été créés, mais votre profil n'a pas pu être enregistré.");
+    if (initializationError) {
+      setError("Le compte a été créé, mais le foyer n'a pas pu être initialisé. Reconnectez-vous puis réessayez.");
+      return;
     }
     setStep(4);
   }
@@ -171,7 +155,7 @@ export default function SignupPage() {
               padding: '5px 10px',
               borderRadius: 10,
               color: step >= i + 1 ? PALETTE.coralText : PALETTE.muted,
-              background: step >= i + 1 ? PALETTE.coralBg : '#F5F1E8',
+              background: step >= i + 1 ? PALETTE.coralBg : 'var(--color-neutral-100)',
             }}
           >
             {label}
@@ -284,7 +268,7 @@ export default function SignupPage() {
                     type="button"
                     aria-label="Retirer"
                     onClick={() => removeChild(row.id)}
-                    style={{ border: 'none', background: '#F5F1E8', color: PALETTE.muted, width: 36, height: 38, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                    style={{ border: 'none', background: 'var(--color-neutral-100)', color: PALETTE.muted, width: 36, height: 38, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M18 6 6 18" />
@@ -323,7 +307,7 @@ export default function SignupPage() {
                 : `Bonjour ${account.name.trim()}, votre espace partagé Foyer+ a été créé.`}
             </p>
             {!joinedExisting && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, textAlign: 'left', margin: '18px 0', padding: 14, background: '#F5F1E8', borderRadius: 12 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, textAlign: 'left', margin: '18px 0', padding: 14, background: 'var(--color-neutral-100)', borderRadius: 12 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, gap: 12 }}>
                   <span style={{ color: PALETTE.muted }}>Compte</span>
                   <span>{account.email}</span>
@@ -356,7 +340,7 @@ export default function SignupPage() {
                 type="button"
                 onClick={handleBack}
                 disabled={loading}
-                style={{ border: `1px solid #eee`, background: 'transparent', color: PALETTE.text, borderRadius: 12, padding: '12px 16px', fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}
+                style={{ border: `1px solid ${PALETTE.divider}`, background: 'transparent', color: PALETTE.text, borderRadius: 12, padding: '12px 16px', fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}
               >
                 Précédent
               </button>

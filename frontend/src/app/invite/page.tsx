@@ -178,7 +178,7 @@ export default function InvitePage() {
 
   return (
     <main style={{ minHeight: '100vh', background: PALETTE.bgGradient, display: 'grid', placeItems: 'center', padding: 20, fontFamily: 'var(--font-body)', color: PALETTE.text }}>
-      <section style={{ width: 'min(520px, 100%)', background: 'rgba(255,255,255,.9)', borderRadius: 26, padding: '30px clamp(22px, 5vw, 38px)', boxShadow: PALETTE.cardShadow }}>
+      <section style={{ width: 'min(520px, 100%)', background: 'color-mix(in srgb, var(--color-surface) 92%, transparent)', borderRadius: 26, padding: '30px clamp(22px, 5vw, 38px)', boxShadow: PALETTE.cardShadow }}>
         <div style={{ fontFamily: 'var(--font-heading)', color: PALETTE.coral, fontWeight: 800, fontSize: 20, marginBottom: 24 }}>Foyer+</div>
 
         {loading ? (
@@ -189,11 +189,11 @@ export default function InvitePage() {
             <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 30, lineHeight: 1.05, marginBottom: 8 }}>Bienvenue dans<br />{invitation.householdName}</h1>
             <p style={{ color: PALETTE.muted, fontSize: 14, lineHeight: 1.5, marginBottom: 20 }}>Confirmez vos informations pour activer votre espace personnel.</p>
 
-            <div style={{ background: '#f4f8fb', borderRadius: 16, padding: 14, marginBottom: 20 }}>
+            <div style={{ background: 'var(--color-input)', borderRadius: 16, padding: 14, marginBottom: 20 }}>
               <div style={{ ...labelStyle, marginBottom: 8 }}>Vos accès</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
                 {invitation.permissions.map((section) => (
-                  <span key={section} style={{ background: '#fff', color: '#577087', padding: '5px 9px', borderRadius: 8, fontSize: 11, fontWeight: 700 }}>
+                  <span key={section} style={{ background: 'var(--color-surface)', color: 'var(--color-accent-700)', padding: '5px 9px', borderRadius: 8, fontSize: 11, fontWeight: 700 }}>
                     {SECTION_LABELS[section] ?? section}
                   </span>
                 ))}

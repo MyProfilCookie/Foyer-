@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Barlow, Barlow_Condensed } from 'next/font/google';
 import './globals.css';
+import ThemeToggle from './_shared/ThemeToggle';
 
 const barlow = Barlow({
   subsets: ['latin'],
@@ -30,8 +31,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${barlow.variable} ${barlowCondensed.variable}`}>
-      <body>{children}</body>
+    <html lang="fr" className={`${barlow.variable} ${barlowCondensed.variable}`} suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('foyer-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t}catch(e){}})()` }} /></head>
+      <body>{children}<ThemeToggle /></body>
     </html>
   );
 }

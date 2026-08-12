@@ -155,7 +155,7 @@ export default function CalendarView({ householdId, parentId, children, events, 
                 key={dateStr}
                 onClick={() => setSelectedDate(dateStr)}
                 style={{
-                  background: isSelected ? PALETTE.coralBg : inMonth ? '#FAFAFA' : 'transparent',
+                  background: isSelected ? PALETTE.coralBg : inMonth ? 'var(--color-input)' : 'transparent',
                   border: isSelected ? `1.5px solid ${PALETTE.coral}` : '1.5px solid transparent',
                   borderRadius: 12,
                   minWidth: 0,
@@ -166,7 +166,7 @@ export default function CalendarView({ householdId, parentId, children, events, 
                   gap: 3,
                   cursor: 'pointer',
                   textAlign: 'left',
-                  color: inMonth ? PALETTE.text : '#c7c2b8',
+                  color: inMonth ? PALETTE.text : PALETTE.mutedLight,
                   fontFamily: 'inherit',
                 }}
               >
