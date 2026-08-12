@@ -40,7 +40,7 @@ export default async function ProfilePage() {
             <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 14, marginBottom: 14 }}>Mon compte</div>
             {ownParent ? (
               <>
-                <ProfilePhoto parentId={ownParent.id} name={ownParent.name} initialUrl={avatarUrl} />
+                <ProfilePhoto parentId={ownParent.id} name={ownParent.name} initialUrl={avatarUrl} initialPath={ownParent.avatar_path} />
                 <ProfileForm parentId={ownParent.id} initialName={ownParent.name} email={user.email ?? ''} />
               </>
             ) : (

@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import { PALETTE } from '../_shared/theme';
 
-export default function ProfilePhoto({ parentId, name, initialUrl }: { parentId: string; name: string; initialUrl: string | null }) {
+export default function ProfilePhoto({ parentId, name, initialUrl, initialPath }: { parentId: string; name: string; initialUrl: string | null; initialPath: string | null }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState(initialUrl);
+  const [currentPath, setCurrentPath] = useState(initialPath);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -27,23 +28,37 @@ export default function ProfilePhoto({ parentId, name, initialUrl }: { parentId:
 
     setLoading(true);
     const extension = file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg';
-    const path = `${parentId}/profile.${extension}`;
-    const { error: uploadError } = await supabase.storage.from('avatars').upload(path, file, { upsert: true, contentType: file.type });
+    const path = `${parentId}/profile-${Date.now()}.${extension}`;
+    const { error: uploadError } = await supabase.storage.from('avatars').upload(path, file, {
+      upsert: false,
+      contentType: file.type,
+      cacheControl: '3600',
+    });
     if (uploadError) {
+      console.error('Avatar upload failed:', uploadError);
       setLoading(false);
-      setError("La photo n'a pas pu être envoyée.");
+      setError(uploadError.message || "La photo n'a pas pu être envoyée.");
+      event.target.value = '';
       return;
     }
     const { error: updateError } = await supabase.from('parents').update({ avatar_path: path }).eq('id', parentId);
     if (updateError) {
       await supabase.storage.from('avatars').remove([path]);
+      console.error('Avatar profile update failed:', updateError);
       setLoading(false);
       setError("La photo n'a pas pu être associée au profil.");
+      event.target.value = '';
       return;
+    }
+    if (currentPath && currentPath !== path) {
+      const { error: removeError } = await supabase.storage.from('avatars').remove([currentPath]);
+      if (removeError) console.error('Previous avatar removal failed:', removeError);
     }
     const { data } = await supabase.storage.from('avatars').createSignedUrl(path, 3600);
     setPreview(data?.signedUrl ?? URL.createObjectURL(file));
+    setCurrentPath(path);
     setLoading(false);
+    event.target.value = '';
     router.refresh();
   }
 
