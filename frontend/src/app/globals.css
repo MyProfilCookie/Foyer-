@@ -72,6 +72,21 @@ input, textarea, select {
   transition: box-shadow 0.15s ease, border-color 0.15s ease;
 }
 
+/* Safari iOS donne aux champs date une largeur minimale native trop grande. */
+input[type='date'] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type='date']::-webkit-date-and-time-value {
+  min-width: 0;
+  text-align: left;
+}
+
 /* Connexion et inscription : typographie plus confortable. */
 .authPage {
   font-size: 17px;
