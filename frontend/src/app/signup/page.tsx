@@ -153,7 +153,7 @@ export default function SignupPage() {
   const namedChildren = children.filter((c) => c.name.trim().length > 0).map((c) => formatPersonName(c.name));
 
   return (
-    <div style={{ minHeight: '100vh', background: PALETTE.bgGradient, fontFamily: 'var(--font-body)', color: PALETTE.text, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '56px 20px 60px' }}>
+    <div className="authPage" style={{ minHeight: '100vh', background: PALETTE.bgGradient, fontFamily: 'var(--font-body)', color: PALETTE.text, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '56px 20px 60px' }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <Link href="/" style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 26, color: PALETTE.coral, textDecoration: 'none' }}>
           Foyer+
@@ -182,7 +182,7 @@ export default function SignupPage() {
       <div style={{ width: 'min(560px, 100%)', background: PALETTE.card, borderRadius: 18, boxShadow: PALETTE.cardShadow, padding: 28 }}>
         {step === 1 && (
           <>
-            <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, marginBottom: 4 }}>Vos informations</div>
+            <div className="authSectionTitle" style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, marginBottom: 4 }}>Vos informations</div>
             <p style={{ fontSize: 13, color: PALETTE.muted, margin: '0 0 18px' }}>
               Ce compte vous permet de gérer le calendrier, les dépenses et le suivi des enfants.
             </p>
@@ -230,7 +230,7 @@ export default function SignupPage() {
 
         {step === 2 && (
           <>
-            <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, marginBottom: 4 }}>Inviter l&apos;autre parent</div>
+            <div className="authSectionTitle" style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, marginBottom: 4 }}>Inviter l&apos;autre parent</div>
             <p style={{ fontSize: 13, color: PALETTE.muted, margin: '0 0 18px' }}>
               L&apos;autre parent recevra un lien pour rejoindre votre espace et voir le calendrier, les dépenses et
               le journal.
@@ -254,7 +254,7 @@ export default function SignupPage() {
 
         {step === 3 && (
           <>
-            <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, marginBottom: 4 }}>Enfants concernés</div>
+            <div className="authSectionTitle" style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, marginBottom: 4 }}>Enfants concernés</div>
             <p style={{ fontSize: 13, color: PALETTE.muted, margin: '0 0 18px' }}>Ajoutez chaque enfant suivi dans l&apos;espace partagé.</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {children.map((row) => (
@@ -314,7 +314,7 @@ export default function SignupPage() {
             >
               ✓
             </div>
-            <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, marginBottom: 4 }}>
+            <div className="authSectionTitle" style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, marginBottom: 4 }}>
               {joinedExisting ? 'Votre compte est prêt' : 'Votre espace est prêt'}
             </div>
             <p style={{ fontSize: 13, color: PALETTE.muted }}>

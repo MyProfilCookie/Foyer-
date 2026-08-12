@@ -72,6 +72,47 @@ input, textarea, select {
   transition: box-shadow 0.15s ease, border-color 0.15s ease;
 }
 
+/* Connexion et inscription : typographie plus confortable. */
+.authPage {
+  font-size: 17px;
+}
+
+.authPage label {
+  font-size: 15px !important;
+}
+
+.authPage input,
+.authPage select,
+.authPage textarea {
+  min-height: 50px;
+  padding: 13px 15px !important;
+  font-size: 17px !important;
+}
+
+.authPage button,
+.authPage a {
+  font-size: 16px !important;
+}
+
+.authPage p {
+  font-size: 15px !important;
+  line-height: 1.5;
+}
+
+.authPage > div:first-child a {
+  font-size: 32px !important;
+}
+
+.authPage .authSectionTitle {
+  font-size: 26px !important;
+  line-height: 1.15;
+}
+
+.authPage form + p,
+.authPage [role='alert'] {
+  font-size: 15px !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;

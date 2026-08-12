@@ -28,7 +28,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: PALETTE.bgGradient, fontFamily: 'var(--font-body)', color: PALETTE.text, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '56px 20px' }}>
+    <div className="authPage" style={{ minHeight: '100vh', background: PALETTE.bgGradient, fontFamily: 'var(--font-body)', color: PALETTE.text, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '56px 20px' }}>
       <div style={{ textAlign: 'center', marginBottom: 28 }}>
         <Link href="/" style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 26, color: PALETTE.coral, textDecoration: 'none' }}>
           Foyer+
@@ -37,7 +37,7 @@ export default function LoginPage() {
       </div>
 
       <div style={{ width: 'min(400px, 100%)', background: PALETTE.card, borderRadius: 18, boxShadow: PALETTE.cardShadow, padding: 28 }}>
-        <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 20, marginBottom: 4 }}>👋 Se connecter</div>
+        <div className="authSectionTitle" style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 20, marginBottom: 4 }}>👋 Se connecter</div>
         <p style={{ fontSize: 13, color: PALETTE.muted, margin: '0 0 22px' }}>Accédez à votre espace parental partagé.</p>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
