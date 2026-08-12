@@ -16,6 +16,7 @@
 
 html {
   background: var(--color-bg-gradient);
+  background-color: var(--color-bg);
   min-height: 100%;
 }
 
@@ -28,6 +29,7 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   background: var(--color-bg-gradient);
+  background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
 }
@@ -121,6 +123,9 @@ input, textarea, select {
 @media (max-width: 860px) {
   .pageShell {
     flex-direction: column;
+    min-height: 100dvh;
+    background: var(--color-bg-gradient) !important;
+    background-color: var(--color-bg) !important;
   }
 
   .sidebarDesktop {
